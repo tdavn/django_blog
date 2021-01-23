@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %} {{ post.title_tag }} {% endblock %}
+
+{% block content %}
+<h1> {{ post.title }}</h1>
+<small>By:{{post.author.last_name }} - {{post.author.email}}  - 
+    {{ post.post_date }} 
+    {% if user.is_authenticated %}
+        - <a href="{% url 'update_post' post.pk %}">(Edit)</a> |
+        <a href="{% url 'delete_post' post.pk %}">(Delete)</a>
+     {% endif %}
+    <br/> <!--the last name not set yet-->
+</small>
+<hr>
+    <br/>
+    {% if post.header_image %}
+        <img src="{{ post.header_image.url }}">
+    {% endif %}
+    <br/><br/>
+    {{ post.body|safe }}
+
+<br/>
+<br/>
+<a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+<br/><br/>
+<hr>
+<form action="{% url 'like_post' post.pk %}" method="POST">
+    {% csrf_token %}
+    <button type="submit", name="post_id", value="{{ post.id }}", class="btn btn-primary btn-sm">Like</button> - {{ total_likes }} likes
+</form>
+<br/><br/>
+<div class="card mb-3">
+    <div class="row no-gutters">
+      <div class="col-md-2">
+        <img src="{{ post.author.profile.profile_pic.url }}" class="card-img" alt="profile picture">
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">{{post.author.first_name }} {{post.author.last_name }}</h5>
+          <p class="card-text"><small class="text-muted">
+              {% if post.author.profile.linkedin_url %}
+              <a href="{{ post.author.profile.linkedin_url }}">LinkedIn</a> | 
+              {% endif %}
+
+              {% if post.author.profile.github_url %}
+              <a href="{{ post.author.profile.github_url}}">Github</a> | 
+              {% endif %}
+
+              {% if post.author.profile.tweeter_url %}
+              <a href="{{ post.author.profile.tweeter_url}}">Tweeter</a> | 
+              {% endif %}
+
+              {% if post.author.profile.facebook_url %}
+              <a href="{{ post.author.profile.facebook_url}}">Facebook</a>   
+              {% endif %}
+            </small>
+          </p>
+          <p class="card-text">{{ post.author.profile.bio }}</p>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+<br/><br/>
+
+{% endblock %}

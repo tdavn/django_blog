@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %} Delete Blog Post {% endblock %}
+{% block content %}
+
+    
+{% if user.is_authenticated %}   
+    <h1> Delete blog .... </h1>
+    <br/> <br/>
+    <h3>Delete: {{ post.title }}</h3>
+    <br/>
+    <div class="form-group">
+        <form method="POST">
+            {% csrf_token %}  <!-- cross site resquest forgery protection, see more on django doc -->
+            <strong>Are you sure?!</strong> <br/><br/>
+            <button class="btn btn-secondary">Delet Post!</button>
+            <!-- need to define a methods in models to point this post to -->
+    </div>
+{% else %}
+You need to login or register to do this act.
+{% endif %}
+{% endblock %}
